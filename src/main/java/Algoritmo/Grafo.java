@@ -6,6 +6,7 @@ import java.util.Random;
  * Clase que representa un grafo dirigido con una matriz de capacidad.
  * Permite agregar aristas con capacidades específicas y generar grafos aleatorios.
  */
+
 public class Grafo {
     private int numVertices;
     private int[][] capacidad; // Matriz de capacidad del grafo
