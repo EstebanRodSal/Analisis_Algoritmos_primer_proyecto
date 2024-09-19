@@ -1,6 +1,7 @@
 package Algoritmo;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 /**
  * Clase que implementa el algoritmo de Ford-Fulkerson para calcular el flujo máximo en un grafo.
@@ -22,10 +23,10 @@ public class FordFulkerson {
         this.numVertices = grafo.getCapacidad().length;
         this.grafoResidual = new int[numVertices][numVertices];
         int[][] capacidad = grafo.getCapacidad();
+
+        // Inicializar el grafo residual usando System.arraycopy para mejorar la eficiencia
         for (int i = 0; i < numVertices; i++) {
-            for (int j = 0; j < numVertices; j++) {
-                grafoResidual[i][j] = capacidad[i][j];
-            }
+            System.arraycopy(capacidad[i], 0, grafoResidual[i], 0, numVertices);
         }
     }
 
@@ -39,7 +40,7 @@ public class FordFulkerson {
      */
     private boolean bfs(int fuente, int sumidero, int[] padres) {
         boolean[] visitado = new boolean[numVertices];
-        LinkedList<Integer> cola = new LinkedList<>();
+        Queue<Integer> cola = new ArrayDeque<>();  // Usar ArrayDeque para mejorar el rendimiento en operaciones de cola
         cola.add(fuente);
         visitado[fuente] = true;
         padres[fuente] = -1;
@@ -48,15 +49,15 @@ public class FordFulkerson {
             int u = cola.poll();
 
             for (int v = 0; v < numVertices; v++) {
-                comparaciones++;
+                comparaciones++;  // Contar comparaciones realizadas
                 if (!visitado[v] && grafoResidual[u][v] > 0) {
-                    asignaciones++;
+                    asignaciones++; //cuenta asignaciones realizadas
+                    padres[v] = u;
+
                     if (v == sumidero) {
-                        padres[v] = u;
                         return true;
                     }
                     cola.add(v);
-                    padres[v] = u;
                     visitado[v] = true;
                 }
             }
@@ -72,6 +73,14 @@ public class FordFulkerson {
      * @return El flujo máximo calculado.
      */
     public int flujoMaximo(int fuente, int sumidero) {
+        if (fuente < 0 || sumidero < 0 || fuente >= numVertices || sumidero >= numVertices) {
+            throw new IllegalArgumentException("Fuente o sumidero fuera de rango.");
+        }
+
+        if (fuente == sumidero) {
+            throw new IllegalArgumentException("La fuente y el sumidero no pueden ser el mismo nodo.");
+        }
+
         int[] padres = new int[numVertices];
         int flujoMaximo = 0;
 
@@ -82,6 +91,7 @@ public class FordFulkerson {
                 flujoCamino = Math.min(flujoCamino, grafoResidual[u][v]);
             }
 
+            // Actualizar las capacidades residuales en el mismo bucle
             for (int v = sumidero; v != fuente; v = padres[v]) {
                 int u = padres[v];
                 grafoResidual[u][v] -= flujoCamino;
@@ -111,4 +121,19 @@ public class FordFulkerson {
     public int getComparaciones() {
         return comparaciones;
     }
+
+    /**
+     * Método para contar las comparaciones realizadas en el BFS.
+     */
+    private void contarComparacion() {
+        comparaciones++;
+    }
+
+    /**
+     * Método para contar las asignaciones realizadas en el BFS.
+     */
+    private void contarAsignacion() {
+        asignaciones++;
+    }
 }
+
