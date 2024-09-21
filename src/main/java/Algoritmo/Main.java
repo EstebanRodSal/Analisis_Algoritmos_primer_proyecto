@@ -5,10 +5,28 @@ public class Main {
     public static void main(String[] args) {
         // Parámetros para los grafos a medir {Vertices, arcos}
         int[][] casos = {
-                {10, 12}, {20, 24}, {40, 48}, {80, 56},
+                {20, 24}, {40, 48}, {80, 56},
                 {10, 100}, {20, 400}, {40, 1600}, {80, 6400}
         };
 
+        System.out.println("------------Grafo quemado-------------------------------------");
+        Grafo grafoQuemado = Grafo.generarGrafoQuemado();
+
+        // Ejecutar y medir Edmonds-Karp
+        EdmondsKarp ekQuemado = new EdmondsKarp(grafoQuemado);
+        medirAlgoritmoEdmondsKarp("Edmonds-Karp", ekQuemado, 0, 10 - 1, 10, 12);
+
+
+        // Ejecutar y medir Ford-Fulkerson
+        FordFulkerson ffQuemado = new FordFulkerson(grafoQuemado);
+        medirAlgoritmoFordFulkerson("Ford-Fulkerson", ffQuemado, 0, 10 - 1, 10, 12);
+
+
+        // Ejecutar y medir Dinic
+        Dinic dinicQuemado = new Dinic(grafoQuemado);
+        medirAlgoritmoDinic("Dinic", dinicQuemado, 0, 10 - 1, 10, 12);
+
+        System.out.println("------------Grafos Aleatorios-------------------------------------");
         for (int[] caso : casos) {
             int vertices = caso[0];
             int arcos = caso[1];
