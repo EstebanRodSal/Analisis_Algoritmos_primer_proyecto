@@ -22,11 +22,15 @@ public class FordFulkerson {
         this.grafo = grafo;
         this.numVertices = grafo.getCapacidad().length;
         this.grafoResidual = new int[numVertices][numVertices];
+
+
         int[][] capacidad = grafo.getCapacidad();
 
-        // Inicializar el grafo residual usando System.arraycopy para mejorar la eficiencia
+
+        // System.arraycopy para mejorar la eficiencia del algorimo
         for (int i = 0; i < numVertices; i++) {
             System.arraycopy(capacidad[i], 0, grafoResidual[i], 0, numVertices);
+
         }
     }
 
@@ -40,25 +44,44 @@ public class FordFulkerson {
      */
     private boolean bfs(int fuente, int sumidero, int[] padres) {
         boolean[] visitado = new boolean[numVertices];
+        asignaciones++;
+
         Queue<Integer> cola = new ArrayDeque<>();  // Usar ArrayDeque para mejorar el rendimiento en operaciones de cola
+        asignaciones++;
+
         cola.add(fuente);
+        asignaciones++;
+
         visitado[fuente] = true;
+        asignaciones++;
+
         padres[fuente] = -1;
+        asignaciones++;
 
         while (!cola.isEmpty()) {
-            int u = cola.poll();
+            comparaciones++;
+
+            int u = cola.poll();  // Obtener el primer elemento de la cola
+            asignaciones++;
 
             for (int v = 0; v < numVertices; v++) {
-                comparaciones++;  // Contar comparaciones realizadas
+                comparaciones++;
+
                 if (!visitado[v] && grafoResidual[u][v] > 0) {
-                    asignaciones++; //cuenta asignaciones realizadas
+                    comparaciones += 2;
                     padres[v] = u;
+                    asignaciones++;
 
                     if (v == sumidero) {
+                        comparaciones++;
                         return true;
                     }
+
                     cola.add(v);
+                    asignaciones++;
+
                     visitado[v] = true;
+                    asignaciones++;
                 }
             }
         }
@@ -73,33 +96,61 @@ public class FordFulkerson {
      * @return El flujo máximo calculado.
      */
     public int flujoMaximo(int fuente, int sumidero) {
+        // Verificar que los nodos fuente y sumidero sean válidos
         if (fuente < 0 || sumidero < 0 || fuente >= numVertices || sumidero >= numVertices) {
+            comparaciones += 2;
             throw new IllegalArgumentException("Fuente o sumidero fuera de rango.");
         }
 
         if (fuente == sumidero) {
+            comparaciones++;
             throw new IllegalArgumentException("La fuente y el sumidero no pueden ser el mismo nodo.");
         }
 
         int[] padres = new int[numVertices];
+        asignaciones++;
+
         int flujoMaximo = 0;
+        asignaciones++;
 
+        // Mientras haya un camino de aumento, actualizamos el flujo máximo
         while (bfs(fuente, sumidero, padres)) {
-            int flujoCamino = Integer.MAX_VALUE;
-            for (int v = sumidero; v != fuente; v = padres[v]) {
-                int u = padres[v];
-                flujoCamino = Math.min(flujoCamino, grafoResidual[u][v]);
-            }
+            comparaciones++;
 
-            // Actualizar las capacidades residuales en el mismo bucle
+            int flujoCamino = Integer.MAX_VALUE;
+            asignaciones++;
+
+            // Encontrar el flujo mínimo en el camino encontrado
             for (int v = sumidero; v != fuente; v = padres[v]) {
+                comparaciones++;
+
                 int u = padres[v];
-                grafoResidual[u][v] -= flujoCamino;
-                grafoResidual[v][u] += flujoCamino;
+                asignaciones++;
+
+                flujoCamino = Math.min(flujoCamino, grafoResidual[u][v]);
+                asignaciones++;
             }
+            comparaciones++;
+
+            // Actualizar el flujo residual
+            for (int v = sumidero; v != fuente; v = padres[v]) {
+                comparaciones++;
+
+                int u = padres[v];
+                asignaciones++;
+
+                grafoResidual[u][v] -= flujoCamino;
+                asignaciones++;
+
+                grafoResidual[v][u] += flujoCamino;
+                asignaciones++;
+            }
+            comparaciones++;
 
             flujoMaximo += flujoCamino;
+            asignaciones++;
         }
+        comparaciones++;
 
         return flujoMaximo;
     }
@@ -121,19 +172,4 @@ public class FordFulkerson {
     public int getComparaciones() {
         return comparaciones;
     }
-
-    /**
-     * Método para contar las comparaciones realizadas en el BFS.
-     */
-    private void contarComparacion() {
-        comparaciones++;
-    }
-
-    /**
-     * Método para contar las asignaciones realizadas en el BFS.
-     */
-    private void contarAsignacion() {
-        asignaciones++;
-    }
 }
-

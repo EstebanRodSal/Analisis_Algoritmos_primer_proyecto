@@ -33,37 +33,51 @@ public class EdmondsKarp {
      * @return El flujo máximo posible desde la fuente hasta el sumidero.
      */
     public int flujoMaximo(int fuente, int sumidero) {
-        int[][] flujoResidual = new int[numVertices][];
-        for (int u = 0; u < numVertices; u++) {
-            flujoResidual[u] = capacidad[u].clone(); // Clona cada fila de la matriz de capacidades para crear la matriz residual
-            asignaciones += numVertices;
+        int[][] flujoResidual = new int[numVertices][]; // Matriz de flujo residual
+        asignaciones++;
+
+        for (int u = 0; u < numVertices; u++) { // Inicializa la matriz de flujo residual
+            comparaciones++;
+            flujoResidual[u] = capacidad[u].clone(); // Clona cada fila de la matriz de capacidades
+            asignaciones++;
         }
+        comparaciones++;
 
         int[] padres = new int[numVertices]; // Array para almacenar el camino encontrado por BFS
+        asignaciones++;
+
         int flujoMaximo = 0; // Inicializa el flujo máximo a 0
+        asignaciones++;
 
         // Realiza búsqueda en anchura (BFS) hasta que no haya más caminos de aumento
         while (bfs(flujoResidual, fuente, sumidero, padres)) {
-            int flujoCamino = Integer.MAX_VALUE;
+            comparaciones++;
+            int flujoCamino = Integer.MAX_VALUE; // Inicializa el flujo del camino a un valor muy grande
+            asignaciones++;
 
             // Encuentra la capacidad mínima en el camino encontrado
             for (int v = sumidero; v != fuente; v = padres[v]) {
+                comparaciones++;
                 int u = padres[v];
                 flujoCamino = Math.min(flujoCamino, flujoResidual[u][v]);
-                comparaciones++;
+                asignaciones += 2;
             }
+            comparaciones++;
 
             // Actualiza el flujo residual en el camino encontrado
             for (int v = sumidero; v != fuente; v = padres[v]) {
+                comparaciones++;
                 int u = padres[v];
                 flujoResidual[u][v] -= flujoCamino;
                 flujoResidual[v][u] += flujoCamino;
-                asignaciones += 2;
+                asignaciones += 3;
             }
+            comparaciones++;
 
-            flujoMaximo += flujoCamino; // Incrementa el flujo máximo por el flujo del camino encontrado
+            flujoMaximo += flujoCamino;
             asignaciones++;
         }
+        comparaciones++;
 
         return flujoMaximo;
     }
@@ -79,23 +93,37 @@ public class EdmondsKarp {
      * @return true si se encontró un camino de aumento, false en caso contrario.
      */
     private boolean bfs(int[][] flujoResidual, int fuente, int sumidero, int[] padres) {
-        boolean[] visitado = new boolean[numVertices]; // Array para marcar los nodos visitados
+        boolean[] visitado = new boolean[numVertices];  // Array para marcar los nodos visitados
+        asignaciones++;
         Queue<Integer> cola = new LinkedList<>(); // Cola para almacenar nodos a explorar
-        cola.add(fuente); // Agregar nodo fuente a la cola
-        visitado[fuente] = true; // Marcar nodo fuente como visitado
+        asignaciones++;
+
+        cola.add(fuente);
+        asignaciones++;
+        visitado[fuente] = true;
+        asignaciones++;
         padres[fuente] = -1; // Inicializar padre del nodo fuente
+        asignaciones++;
 
         while (!cola.isEmpty()) {
+            comparaciones++;
             int u = cola.poll(); // Obtener y eliminar el nodo del frente de la cola
+            asignaciones++;
 
             // Recorre todos los vértices adyacentes al nodo u
             for (int v = 0; v < numVertices; v++) {
+                comparaciones++;
                 // Si el nodo no ha sido visitado y hay capacidad residual
                 if (!visitado[v] && flujoResidual[u][v] > 0) {
-                    cola.add(v); // Agregar nodo a la cola
-                    padres[v] = u; // Establecer el padre del nodo
-                    visitado[v] = true; // Marcar el nodo como visitado
+                    comparaciones += 2;
+                    cola.add(v); // Agregar el nodo a la cola
+                    asignaciones++;
+                    padres[v] = u;  // Establecer el padre del nodo
+                    asignaciones++;
+                    visitado[v] = true;  // Marcar el nodo como visitado
+                    asignaciones++;
                     if (v == sumidero) { // Si llegamos al nodo sumidero
+                        comparaciones++;
                         return true; // Camino encontrado
                     }
                 }
