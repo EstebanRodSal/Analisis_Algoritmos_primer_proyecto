@@ -59,7 +59,7 @@ public class Grafo {
             grafo.agregarArista(i, i + 1, capacidad);
         }
 
-        // Asegurar que haya al menos un arco desde el penúltimo nodo al sumidero
+        // Asegurar que haya al menos un arco desde el penúltimo nodo al sumidero para que no de 0 en algun caso
         int capacidadFinal = 20 + rand.nextInt(681); // Capacidad entre 20 y 700 para la última arista
         grafo.agregarArista(vertices - 2, vertices - 1, capacidadFinal);
 
