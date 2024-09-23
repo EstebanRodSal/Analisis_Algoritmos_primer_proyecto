@@ -53,7 +53,18 @@ public class Grafo {
         Grafo grafo = new Grafo(vertices);
         Random rand = new Random();
 
-        for (int i = 0; i < arcos; i++) {
+        // Crear un camino básico desde la fuente (0) hasta el sumidero (vertices - 1)
+        for (int i = 0; i < vertices - 1; i++) {
+            int capacidad = 20 + rand.nextInt(681); // Capacidad entre 20 y 700 para cada arco
+            grafo.agregarArista(i, i + 1, capacidad);
+        }
+
+        // Asegurar que haya al menos un arco desde el penúltimo nodo al sumidero
+        int capacidadFinal = 20 + rand.nextInt(681); // Capacidad entre 20 y 700 para la última arista
+        grafo.agregarArista(vertices - 2, vertices - 1, capacidadFinal);
+
+        // Crear aristas adicionales de manera aleatoria
+        for (int i = 0; i < arcos - (vertices - 1); i++) {
             int fuente = rand.nextInt(vertices);
             int destino = rand.nextInt(vertices);
             int capacidad = 20 + rand.nextInt(681); // Capacidad entre 20 y 700 para cada arco
@@ -66,6 +77,7 @@ public class Grafo {
 
         return grafo;
     }
+
 
     /**
      * Devuelve un grafo quemado para el caso {10, 12}.
