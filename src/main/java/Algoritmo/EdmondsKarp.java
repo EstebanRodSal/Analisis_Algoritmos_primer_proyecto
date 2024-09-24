@@ -33,29 +33,29 @@ public class EdmondsKarp {
      * @return El flujo máximo posible desde la fuente hasta el sumidero.
      */
     public int flujoMaximo(int fuente, int sumidero) {
-        int[][] flujoResidual = new int[numVertices][]; // Matriz de flujo residual
+        int[][] flujoResidual = new int[numVertices][];
         asignaciones++;
 
-        for (int u = 0; u < numVertices; u++) { // Inicializa la matriz de flujo residual
+        for (int u = 0; u < numVertices; u++) {
             comparaciones++;
-            flujoResidual[u] = capacidad[u].clone(); // Clona cada fila de la matriz de capacidades
+            flujoResidual[u] = capacidad[u].clone();
             asignaciones++;
         }
         comparaciones++;
 
-        int[] padres = new int[numVertices]; // Array para almacenar el camino encontrado por BFS
+        int[] padres = new int[numVertices];
         asignaciones++;
 
-        int flujoMaximo = 0; // Inicializa el flujo máximo a 0
+        int flujoMaximo = 0;
         asignaciones++;
 
-        // Realiza búsqueda en anchura (BFS) hasta que no haya más caminos de aumento
         while (bfs(flujoResidual, fuente, sumidero, padres)) {
             comparaciones++;
-            int flujoCamino = Integer.MAX_VALUE; // Inicializa el flujo del camino a un valor muy grande
+
+            int flujoCamino = Integer.MAX_VALUE;
             asignaciones++;
 
-            // Encuentra la capacidad mínima en el camino encontrado
+            // Encontrar el flujo mínimo en el camino encontrado
             for (int v = sumidero; v != fuente; v = padres[v]) {
                 comparaciones++;
                 int u = padres[v];
@@ -64,15 +64,17 @@ public class EdmondsKarp {
             }
             comparaciones++;
 
-            // Actualiza el flujo residual en el camino encontrado
+            // Actualizar el flujo residual y mostrar la ruta
+            System.out.print("\033[31m Ruta encontrada: " + fuente);
             for (int v = sumidero; v != fuente; v = padres[v]) {
                 comparaciones++;
                 int u = padres[v];
                 flujoResidual[u][v] -= flujoCamino;
                 flujoResidual[v][u] += flujoCamino;
                 asignaciones += 3;
+                System.out.print(" -> " + v);
             }
-            comparaciones++;
+            System.out.println(" | Flujo del camino: \033[0m" + flujoCamino);
 
             flujoMaximo += flujoCamino;
             asignaciones++;
@@ -81,6 +83,7 @@ public class EdmondsKarp {
 
         return flujoMaximo;
     }
+
 
     /**
      * Realiza una búsqueda en anchura (BFS) para encontrar un camino de aumento

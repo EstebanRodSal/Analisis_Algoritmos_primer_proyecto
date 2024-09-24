@@ -155,6 +155,7 @@ public class Dinic {
                     capacidad[v][u] += flujoAumentado;
                     asignaciones += 2;
 
+                    System.out.println("\033[31m Ruta: " + u + " -> " + v + " | Flujo: \033[0m" + flujoAumentado);
                     return flujoAumentado;
                 }
             }
@@ -162,6 +163,7 @@ public class Dinic {
 
         return 0;
     }
+
 
     /**
      * Devuelve el número de asignaciones realizadas durante la ejecución del algoritmo.

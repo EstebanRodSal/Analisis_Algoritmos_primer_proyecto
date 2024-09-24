@@ -132,7 +132,8 @@ public class FordFulkerson {
             }
             comparaciones++;
 
-            // Actualizar el flujo residual
+            // Actualizar el flujo residual y mostrar la ruta
+            System.out.print("\033[31m Ruta encontrada: " + fuente);
             for (int v = sumidero; v != fuente; v = padres[v]) {
                 comparaciones++;
 
@@ -144,8 +145,11 @@ public class FordFulkerson {
 
                 grafoResidual[v][u] += flujoCamino;
                 asignaciones++;
+
+                System.out.print(" -> " + v);
             }
-            comparaciones++;
+            System.out.println(" | Flujo del camino: \033[0m" + flujoCamino);
+
 
             flujoMaximo += flujoCamino;
             asignaciones++;
@@ -154,6 +158,7 @@ public class FordFulkerson {
 
         return flujoMaximo;
     }
+
 
     /**
      * Método para obtener el número de asignaciones realizadas durante la ejecución.
