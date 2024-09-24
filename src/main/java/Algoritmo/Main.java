@@ -1,5 +1,29 @@
 package Algoritmo;
+/*
+Integrantes del grupo:
+Esteban Rodríguez Salas
+Emanuel Jiménez Salas
+Marco Antonio Quirós
+ */
 
+/*
+Aspectos importantes a tomar en cuanta para medir los algoritmos:
+
+1- Cada algoritmo muestra en consola caracteristicas como:
+    -Nombre del algoritmo evaluado
+    -Flujo maximo
+    -Cantidad asignaciones
+    -Cantidad comparaciones
+    -Tiempo de ejecución
+    -Ruta de los vertices hacia hacia el flujo maximo(En color rojo)
+    -Calificación entre denso y ligero
+2- Cada algoritmo se evalua con el mismo grafo para cada caso de (10v, 12a), (20v,24a)...
+3-En el caso del grafo de 10 vertices y 12 arcos el grafo está quemado dentro de la clase grafo, por ende en cada ejecucuion
+  el resultado es el mismo
+4-Para el resto de casos de cada catidad de vertices y arcos el grafos se genera respetando la cantidad de vertices y arcos
+  a evaluar pero el flujo maximo de cada vertice se genera de forma aleatoria con un valor entre (20-700) por lo cual el flujo maximo
+  no siempre será el mismo para estos casos.
+ */
 public class Main {
 
     public static void main(String[] args) {
